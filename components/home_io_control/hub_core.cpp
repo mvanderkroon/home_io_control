@@ -460,7 +460,17 @@ void IOHomeControlComponent::loop() {
     if (due.has_value())
       this->queue_request_device_status(*due);
     this->queue_due_periodic_polls_();
+    this->queue_due_catchup_reads_();
   }
+}
+
+void IOHomeControlComponent::queue_due_catchup_reads_() {
+  if (!this->poll_policy_.take_due_catchup(millis()))
+    return;
+  const std::vector<std::string> devices = this->registry_.all_linked_devices();
+  ESP_LOGD(TAG, "No exchange for %" PRIu32 " ms after linked-remote activity: reading %zu linked device(s)",
+           this->tuning_.remote_activity_catchup_poll_ms, devices.size());
+  this->schedule_device_polls_(devices, 0);
 }
 
 void IOHomeControlComponent::queue_due_periodic_polls_() {

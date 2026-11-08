@@ -215,6 +215,11 @@ static constexpr uint8_t SCHEDULED_POLL_RETRY_GRACE_LAST_FAILURE = 3;
 /// times within one exchange (under EXCHANGE_TOTAL_BUDGET_MS), and blocks only when all of them miss.
 static constexpr uint8_t STOP_SETTLE_POLL_TRIES = EXCHANGE_RETRY_COUNT;
 
+/// Delay before polling after overheard remote traffic: another controller's frame to a registered
+/// device, and, by default, a linked-remote press (its `remote_activity_poll_delay_ms` tuning
+/// default; ADR 0069).
+static constexpr uint32_t REMOTE_ACTIVITY_STATUS_POLL_DELAY_MS = 2000;
+
 /// Wall-clock ceiling on one whole exchange, retries included.
 ///
 /// EXCHANGE_RETRY_COUNT tries x (long preamble + response window + retry gap) is what actually
